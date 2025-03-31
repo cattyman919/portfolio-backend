@@ -1,0 +1,32 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "module": "serverless.ts",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "prisma:generate": "npx prisma generate",
+    "build": "tsc",
+    "dev": "npm run prisma:generate && npm run build && npx serverless dev",
+    "deploy": "npm run prisma:generate && npm run build && npx serverless deploy"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prisma": "^6.5.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-plugin-typescript": "^2.1.5",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@as-integrations/aws-lambda": "^3.1.0",
+    "@prisma/client": "^6.5.0",
+    "graphql": "^16.10.0"
+  }
+}
