@@ -52,9 +52,17 @@ const typeDefs = `#graphql
         project: CreateProjectInput!
     ): Project!
 
+    createManyProject(
+        many_project: [CreateProjectInput!]
+    ): [Project!]
+
     createPerson(
         person: CreatePersonInput!
     ): Person!
+
+    createManyPerson(
+        many_person: [CreatePersonInput!]
+    ): [Person!]
   }
 `;
 
@@ -69,6 +77,7 @@ const resolvers = {
       return projects;
     },
   },
+
   Mutation: {
     createProject: async (_: any, args: any) => {
       // Convert date string to Date object
@@ -83,6 +92,19 @@ const resolvers = {
       return project;
     },
 
+    createManyProject: async (_: any, args: any) => {
+      const projects = args.many_project.map((project: any) => ({
+        ...project,
+        date: new Date(project.date)
+      }));
+
+      const manyProject = await prisma.project.createManyAndReturn({
+        data: projects
+      });
+
+      return manyProject;
+    },
+
     createPerson: async (_: any, args: any) => {
       const person = await prisma.person.create({
         data: {
@@ -90,6 +112,13 @@ const resolvers = {
         },
       });
       return person;
+    },
+
+    createManyPerson: async (_: any, args: any) => {
+      const manyPerson = await prisma.person.createManyAndReturn({
+        data: args.many_person
+      });
+      return manyPerson;
     },
   }
 };
