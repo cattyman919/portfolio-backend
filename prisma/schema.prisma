@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Project {
-  id                   Int             @id @default(autoincrement())
+  id                   Int      @id @default(autoincrement())
   title                String
   short_description    String
   detailed_description String
@@ -18,17 +18,18 @@ model Project {
   languages            String[]
   github_repo          String?
   website              String?
-  contributions        Credit_Person[] @relation("Credit_PersonToProject")
+  contributions        String[]
+  credits              Person[]
 
   @@map("projects")
 }
 
-model Credit_Person {
+model Person {
   id       Int       @id @default(autoincrement())
   name     String    @unique
   github   String?
   linkedin String?
-  projects Project[] @relation("Credit_PersonToProject")
+  projects Project[]
 
-  @@map("credit_person")
+  @@map("person")
 }

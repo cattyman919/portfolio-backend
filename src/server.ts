@@ -18,10 +18,11 @@ const typeDefs = `#graphql
     languages: [String!]
     github_repo: String
     website: String
-    contributions: [Credit_Person!]
+    contributions: [String!]
+    credits: [Person!]
   }
 
-  type Credit_Person {
+  type Person {
     id : Int!
     name: String!
     github: String
@@ -29,7 +30,6 @@ const typeDefs = `#graphql
     projects: [Project!]
   }
 
-  # Input types for Project creation
   input CreateProjectInput{
     title: String!
     short_description: String!
@@ -38,10 +38,10 @@ const typeDefs = `#graphql
     languages: [String!]
     github_repo: String
     website: String
+    contributions: [String!]
   }
 
-  # Input types for CreditPerson creation
-  input CreateCreditPersonInput {
+  input CreatePersonInput {
     name: String!
     github: String
     linkedin: String
@@ -52,9 +52,9 @@ const typeDefs = `#graphql
         project: CreateProjectInput!
     ): Project!
 
-    createCreditPerson(
-        credit_person: CreateCreditPersonInput!
-    ): Credit_Person!
+    createPerson(
+        person: CreatePersonInput!
+    ): Person!
   }
 `;
 
@@ -63,17 +63,17 @@ const resolvers = {
     fetchProjects: async () => {
       const projects = await prisma.project.findMany({
         include: {
-          contributions: true,
+          credits: true,
         },
       });
       return projects;
     },
   },
   Mutation: {
-    createProject: async (_: any, args:any) => {
+    createProject: async (_: any, args: any) => {
       // Convert date string to Date object
       const dateObj = new Date(args.project.date);
-      
+
       const project = await prisma.project.create({
         data: {
           date: dateObj,
@@ -82,14 +82,14 @@ const resolvers = {
       });
       return project;
     },
-    
-    createCreditPerson: async (_:any, args:any) => {
-      const credit_person = await prisma.credit_Person.create({
+
+    createPerson: async (_: any, args: any) => {
+      const person = await prisma.person.create({
         data: {
-          ...args.credit_person
+          ...args.person
         },
       });
-      return credit_person;
+      return person;
     },
   }
 };
@@ -99,11 +99,11 @@ const server = new ApolloServer({
   resolvers,
 });
 
-const {url} = await startStandaloneServer(server,{
-  listen: {port: 4000}
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 }
 })
 
-console.log(url , "Server ready at port", 4000);
+console.log(url, "Server ready at port", 4000);
 //export const graphqlHandler = startServerAndCreateLambdaHandler(
 //  server,
 //  handlers.createAPIGatewayProxyEventV2RequestHandler(),

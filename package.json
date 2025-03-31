@@ -12,7 +12,7 @@
   "scripts": {
     "prisma:generate": "npx prisma generate",
     "build": "tsc",
-    "dev": "npm run prisma:generate && npm run build && npx serverless dev",
+    "dev": "npm run prisma:generate && npm run build && npx nodemon src/server.ts",
     "deploy": "npm run prisma:generate && npm run build && npx serverless deploy"
   },
   "devDependencies": {
