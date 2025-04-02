@@ -7,11 +7,13 @@ const prisma = new PrismaClient();
 const typeDefs = `#graphql
   type Query {
     fetchProjects: [Project]
+    project(id: Int!): Project
   }
 
   type Project {
     id : Int!
     title: String!
+    image: String!
     short_description: String!
     detailed_description: String!
     date: String!
@@ -33,6 +35,7 @@ const typeDefs = `#graphql
   input CreateProjectInput{
     title: String!
     short_description: String!
+    image: String!
     detailed_description: String!
     date: String!
     languages: [String!]
@@ -56,6 +59,11 @@ const typeDefs = `#graphql
         many_project: [CreateProjectInput!]
     ): [Project!]
 
+    updateProjectImage(
+        id: Int!
+        image: String!
+    ): Project!
+
     createPerson(
         person: CreatePersonInput!
     ): Person!
@@ -70,22 +78,32 @@ const resolvers = {
   Query: {
     fetchProjects: async () => {
       const projects = await prisma.project.findMany({
-        include: {
-          credits: true,
-        },
+        omit:{
+          detailed_description: true,
+          contributions: true,
+        }
       });
       return projects;
     },
+
+    project: async (_ : any, args:{id: number}) => {
+      const project = await prisma.project.findFirst({
+        where: {
+          id: args.id
+        },
+        include:{
+          credits: true,
+        }
+      },
+      )
+      return project
+    }
   },
 
   Mutation: {
     createProject: async (_: any, args: any) => {
-      // Convert date string to Date object
-      const dateObj = new Date(args.project.date);
-
       const project = await prisma.project.create({
         data: {
-          date: dateObj,
           ...args.project,
         },
       });
@@ -93,23 +111,28 @@ const resolvers = {
     },
 
     createManyProject: async (_: any, args: any) => {
-      const projects = args.many_project.map((project: any) => ({
-        ...project,
-        date: new Date(project.date)
-      }));
-
       const manyProject = await prisma.project.createManyAndReturn({
-        data: projects
+        data: args.manyProject
       });
 
       return manyProject;
     },
 
+    updateProjectImage: async (_: any, args: { id: number, image: string }) => {
+      const project = await prisma.project.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          image: args.image,
+        }
+      })
+      return project
+    },
+
     createPerson: async (_: any, args: any) => {
       const person = await prisma.person.create({
-        data: {
-          ...args.person
-        },
+        data: args.person
       });
       return person;
     },

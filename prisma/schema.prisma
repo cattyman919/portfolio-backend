@@ -12,9 +12,10 @@ datasource db {
 model Project {
   id                   Int      @id @default(autoincrement())
   title                String
+  image                String   @default("")
   short_description    String
   detailed_description String
-  date                 DateTime
+  date                 String
   languages            String[]
   github_repo          String?
   website              String?
