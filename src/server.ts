@@ -10,7 +10,7 @@ const typeDefs = `#graphql
     project(id: Int!): Project
   }
 
-  type Project {
+  type Project @cacheControl(maxAge: 600) {
     id : Int!
     title: String!
     image: String!
@@ -24,7 +24,7 @@ const typeDefs = `#graphql
     credits: [Person!]
   }
 
-  type Person {
+  type Person @cacheControl(maxAge: 600) {
     id : Int!
     name: String!
     github: String
@@ -72,13 +72,24 @@ const typeDefs = `#graphql
         many_person: [CreatePersonInput!]
     ): [Person!]
   }
+
+  enum CacheControlScope {
+      PUBLIC
+      PRIVATE
+  }
+    
+  directive @cacheControl(
+      maxAge: Int
+      scope: CacheControlScope
+      inheritMaxAge: Boolean
+  ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 `;
 
 const resolvers = {
   Query: {
     fetchProjects: async () => {
       const projects = await prisma.project.findMany({
-        omit:{
+        omit: {
           detailed_description: true,
           contributions: true,
         }
@@ -86,12 +97,12 @@ const resolvers = {
       return projects;
     },
 
-    project: async (_ : any, args:{id: number}) => {
+    project: async (_: any, args: { id: number }) => {
       const project = await prisma.project.findFirst({
         where: {
           id: args.id
         },
-        include:{
+        include: {
           credits: true,
         }
       },
