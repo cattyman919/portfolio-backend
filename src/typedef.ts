@@ -1,16 +1,18 @@
 export const typeDefs = `#graphql
+  scalar Date
+
   type Query {
     fetchProjects: [Project]
     project(id: Int!): Project
   }
 
-  type Project @cacheControl(maxAge: 600) {
+  type Project @cacheControl(maxAge: 3600) {
     id : Int!
     title: String!
     image: String!
     short_description: String!
     detailed_description: String!
-    date: String!
+    date: Date!
     languages: [String!]
     github_repo: String
     website: String
@@ -18,7 +20,7 @@ export const typeDefs = `#graphql
     credits: [Person!]
   }
 
-  type Person @cacheControl(maxAge: 600) {
+  type Person @cacheControl(maxAge: 3600) {
     id : Int!
     name: String!
     github: String

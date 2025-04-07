@@ -27,13 +27,12 @@ import { resolvers } from "./resolver.js"
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  //plugins: [myPlugin],
 });
 
 //const { url } = await startStandaloneServer(server, {
 //  listen: { port: 4000 }
 //})
-
+//
 //console.log(url, "Server ready at port", 4000);
 
 export const graphqlHandler = startServerAndCreateLambdaHandler(

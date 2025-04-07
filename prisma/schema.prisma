@@ -15,7 +15,7 @@ model Project {
   image                String   @default("")
   short_description    String
   detailed_description String
-  date                 String
+  date                 DateTime @db.Date @default(now())
   languages            String[]
   github_repo          String?
   website              String?

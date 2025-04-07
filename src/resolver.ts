@@ -1,15 +1,22 @@
 import { PrismaClient } from "@prisma/client";
+import { dateScalar } from "./scalar.js";
 
 const prisma = new PrismaClient();
 export const resolvers = {
+  Date: dateScalar,
   Query: {
     fetchProjects: async () => {
       const projects = await prisma.project.findMany({
         omit: {
           detailed_description: true,
           contributions: true,
+        },
+        orderBy:
+        {
+          date: "desc"
         }
       });
+
       return projects;
     },
 

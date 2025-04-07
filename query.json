@@ -12,5 +12,5 @@
     },
     "rawPath": "/",
     "routeKey": "/",
-    "body": "{\"operationName\": null, \"variables\": null, \"query\": \"{ fetchProjects{title} }\"}"
+    "body": "{\"operationName\": null, \"variables\": null, \"query\": \"{ fetchProjects{title, date} }\"}"
 }
