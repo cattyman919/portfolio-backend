@@ -5,6 +5,10 @@ const prisma = new PrismaClient();
 export const resolvers = {
   Date: dateScalar,
   Query: {
+    projectCount: async () => {
+      const projectCount = await prisma.project.count()
+      return projectCount
+    },
     fetchProjects: async () => {
       const projects = await prisma.project.findMany({
         omit: {

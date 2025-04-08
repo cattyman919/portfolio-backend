@@ -12,5 +12,5 @@
     },
     "rawPath": "/",
     "routeKey": "/",
-    "body": "{\"operationName\": null, \"variables\": null, \"query\": \"{ fetchProjects{title, date} }\"}"
+    "body": "{\"operationName\": \"GetProjectById\", \"variables\": {\"projectId\": 5}, \"query\": \"query GetProjectById($projectId: Int!) { project(id: $projectId) { title gallery } }\"}"
 }

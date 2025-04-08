@@ -4,6 +4,7 @@ export const typeDefs = `#graphql
   type Query {
     fetchProjects: [Project]
     project(id: Int!): Project
+    projectCount: Int!
   }
 
   type Project @cacheControl(maxAge: 3600) {
@@ -18,6 +19,7 @@ export const typeDefs = `#graphql
     website: String
     contributions: [String!]
     credits: [Person!]
+    gallery: [String!]
   }
 
   type Person @cacheControl(maxAge: 3600) {
@@ -28,7 +30,7 @@ export const typeDefs = `#graphql
     projects: [Project!]
   }
 
-  input CreateProjectInput{
+    input CreateProjectInput{
     title: String!
     short_description: String!
     image: String!

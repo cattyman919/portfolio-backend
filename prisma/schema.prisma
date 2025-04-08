@@ -21,6 +21,7 @@ model Project {
   website              String?
   contributions        String[]
   credits              Person[]
+  gallery              String[]
 
   @@map("projects")
 }
